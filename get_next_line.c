@@ -12,6 +12,20 @@ int	ft_strlen(char *str)
 	return (i);
 }
 
+void	*ft_calloc(size_t count, size_t size)
+{
+	void	*str;
+	size_t	i;
+
+	i = 0;
+	str = malloc(count * size);
+	if (!str)
+		return (NULL);
+	while (i < count * size)
+		((unsigned char *)str)[i++] = 0;
+	return (str);
+}
+
 char	*ft_strchr_adapted(const char *s, int c)
 {
 	char	*temp;
@@ -29,7 +43,7 @@ char	*ft_strchr_adapted(const char *s, int c)
 	}
 	if (*temp == c)
 		return (++temp);
-	return ("merda");
+	return (NULL);
 }
 
 char	*ft_strjoin(char const *s1, char const *s2)
@@ -117,7 +131,7 @@ char	*ft_gnl_read(int fd, char *stack)
 	int		i;
 
 	i = 0;
-	heap = calloc(sizeof(char), BUFFER_SIZE + 1);
+	heap = ft_calloc(sizeof(char), BUFFER_SIZE + 1);
 	if (!heap)
 		return (NULL);
 	while (1)
@@ -185,12 +199,10 @@ char	*ft_get_next_line(int	fd)
 	if (ft_strlen(stack) == 0 || ft_chek_lb(stack) == 0)
 		stack = ft_gnl_read(fd, stack);
 	if (ft_chek_lb(stack) == 1)
-	{
 		line = ft_left(stack, ft_lb_pos(stack));
-		stack =ft_strchr_adapted(stack, '\n');
-	}
 	else
-		line = ft_strdup(stack);
+		line = stack;
+	stack =ft_strchr_adapted(stack, '\n');
 	return (line);
 }
 
@@ -203,7 +215,7 @@ int	main(void)
 
 	i = 0;
 	fd = open("foobar4.txt", O_RDONLY);
-	while (i < 6)
+	while (i < 60)
 	{
 		printf("%s", ft_get_next_line(fd));
 		i++;
