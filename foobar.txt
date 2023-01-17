@@ -1,0 +1,46 @@
+Comissão Nacional de Proteção de Dados multou a autarquia em 1,2 milhões de euros depois de a
+ Câmara de Lisboa ter partilhado dados de manifestantes. O Observador sabe que autarquia\n pondera contestar.
+A Comissão Nacional de Proteção de Dados (CNPD) multou a 
+autarquia da capital no âmbito do caso “Russiagate” em 1,2 
+milhões de euros, depois de a Câmara de Lisboa ter 
+partilhado dados de manifestantes anti-Putin com as autoridades \ndaquele país.
+
+O caso explodiu em plena pré-campanha autárquica e motivou duras críticas de Carlos Moedas a Fernando Medina. 
+Apesar de reconhecer a gravidade da situação, o Observador sabe que é intenção da autarquia contestar a multa 
+para evitar um rombo tão grande no erário público.
+
+A autarquia já reagiu através de um comunicado. “Está decisão é uma herança 
+pesada que a anterior liderança da Câmara Municipal de Lisboa deixa aos lisboetas e 
+que coloca em causa opções e apoios sociais previstos no orçamento agora apresentado. 
+Vamos avaliar em pormenor esta multa e qual a melhor forma de protegermos os interesses dos munícipes e da instituição.”
+
+De acordo com a deliberação a que o Observador teve acesso, a CNPD acredita 
+que está em causa a “violação do princípio da licitude, lealdade e transparência, da 
+violação do princípio da minimização dos dados, na vertente de ‘need to know’ [necessidade de conhecer], 
+da violação do dever de prestar as informações previstas no artigo 13º do RGPD, da violação do princípio da 
+limitação da conservação e da violação da obrigação de realização de uma avaliação de impacto 
+sobre a proteção de dados”. No total, e de acordo com a deliberação da CNPD, foram identificadas 
+225 infrações cometidas pela autarquia.
+
+O caso foi revelado em junho de 2021 pelo Observador e jornal Expresso: a 
+autarquia de Lisboa, então presidida por Fernando Medina, enviou por email os nomes e 
+moradas de três pessoas que organizaram uma manifestação anti-Putin às autoridades russas.
+
+A autarquia reconheceu o erro e abriu uma auditoria interna. Fernando Medina 
+acabou a pedir desculpa e a prometer novas medidas para proteger o direito à manifestação. 
+Mas o caso dos ativistas anti-Putin era apenas a ponta do icebergue: rápido se percebeu que a 
+prática de partilhar dados de manifestantes com embaixadas dos países visados era há muito uma realidade.
+
+Autoridades de países como China, Angola, Rússia, Israel ou Venezuela também 
+receberam dados de manifestantes que protestaram junto às respetivas embaixadas.
+
+Conhecidos os resultados da auditoria interna, a Câmara de Lisboa identificou (pelo menos) 
+52 casos de envios de dados pessoais e reconheceu que o mesmo protocolo era 
+usado também durante o período de António Costa como presidente da autarquia.
+
+Como consequência, Fernando Medina ordenou a reestruturação nos serviços da autarquia com a exoneração 
+do encarregado de proteção de dados e a extinção do gabinete de apoio 
+à presidência — então responsável por receber os pedidos de manifestação e por 
+cruzar informações com as autoridades locais e embaixadas.
+
+Source: "https://observador.pt/2022/01/14/russiagate-protecao-de-dados-multa-camara-em-12-milhoes-autarquia-aponta-o-dedo-a-heranca-pesada-de-medina/"
