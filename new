@@ -1,0 +1,237 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   get_next_line.c                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mromao-d <mromao-d@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/02/12 11:59:50 by mromao-d          #+#    #+#             */
+/*   Updated: 2023/03/13 11:55:46 by mromao-d         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+# include <stdio.h>
+# include <string.h>
+# include <unistd.h>
+# include <fcntl.h>
+# include <stdlib.h>
+
+# ifndef BUFFER_SIZE
+#  define BUFFER_SIZE 1
+# endif
+
+void	*ft_calloc(int nmemb, int size)
+{
+	void	*str;
+	int	i;
+
+	i = 0;
+	str = (void *)malloc(nmemb * size);
+	if (!str)
+		return (NULL);
+	while (i < nmemb * size)
+	{
+		((unsigned char *)str)[i] = 0;
+		i++;
+	}
+	return (str);
+}
+
+int ft_strlen(char  *str)
+{
+	int i;
+
+	i = 0;
+	if (!str || str[0] == 0)
+		return (0);
+	while (str[i])
+		i++;
+	return (i);
+}
+
+size_t	ft_lb_pos(char *s)
+{
+	int	i;
+
+	i = 0;
+	if (!s)
+		return (0);
+	while (s[i])
+	{
+		if (s[i] == '\n')
+			break ;
+		i++;
+	}
+	if (s[i] == '\n')
+		return (i + 1);
+	return (0);
+}
+
+char	*ft_strdup(const char *s1)
+{
+	char	*s2;
+	char	*temp;
+	int		i;
+
+	i = 0;
+	while (s1[i])
+		i++;
+	s2 = (char *) malloc(sizeof(char) * (i + 1));
+	if (!s2)
+		return (NULL);
+	temp = s2;
+	while (*s1 != '\0')
+		*temp++ = *s1++;
+	*temp = '\0';
+	return (s2);
+}
+
+char	*ft_strjoin(char *s1, char *s2)
+{
+	int		i;
+	char	*output;
+	int		keep_size;
+
+	i = 0;
+	keep_size = ft_strlen(s2);
+	output = (char *)malloc(sizeof(char) * (ft_strlen(s1) + ft_strlen(s2) + 1));
+	if (!s1 || !s2 || !output)
+		return (NULL);
+	while (i < ft_strlen((char *)s1))
+	{
+		output[i] = s1[i];		
+		i++;
+	}
+	while (i < ft_strlen(s1) + keep_size && *s2)
+	{
+		output[i] = *s2++;
+		i++;
+	}
+	/* free(s1); */
+	output[i] = 0;
+	return (output);
+}
+
+char	*ft_gnl_read(int fd, char *stack)
+{
+	int		end;
+	char	*heap;
+	int		test;
+
+	end = BUFFER_SIZE;
+	heap = ft_calloc(sizeof(char), BUFFER_SIZE + 1);
+	if (!heap)
+		return (NULL);
+	while (fd > 0)
+	{
+		if ((test = ft_lb_pos(heap)) > 0)
+			break;
+		end = read(fd, heap, BUFFER_SIZE);
+		if (fd < 0)
+		{
+			if (heap)
+			{
+				free(heap);
+				heap = 0;
+				break;
+			}
+		}
+		heap[end] = 0;
+		if (stack)
+			stack = ft_strjoin(stack, heap);
+		else
+			stack = ft_strdup(heap);
+	}
+	free(heap);
+	return(stack);
+}
+
+char	*ft_left(char *s, int i)
+{
+	char	*temp;
+	int		size;
+
+	size = 0;
+	if (i < ft_strlen(s))
+		temp = ft_calloc(sizeof(char), (i + 1));
+	else
+		temp = ft_calloc(sizeof(char), (ft_strlen(s) + 1));
+	if (!temp || !s)
+		return (NULL);
+	if (i == 0)
+	{	
+		/* free(s);
+		s = 0; */
+		return (NULL);
+	}
+	while (s[size] != 0 && size < i)
+	{	
+		temp[size] = s[size];
+		size++;
+	}
+	temp[size] = 0;
+	return (temp);
+}
+
+char	*ft_strchr_adapted(char *s, int c)
+{
+	char	*temp;
+
+	temp = s;
+	if (!s)
+		return (NULL);
+	while (*temp != '\0')
+	{
+		if (*temp == c)
+			break ;
+		temp++;
+	}
+	free(s);
+	s = 0;
+	if (*temp == c)
+		return (++temp);
+	else
+	{
+		/* free(temp); */
+		return (NULL);
+	}
+}
+
+char	*get_next_line(int fd)
+{
+	static char	*stack;
+	char		*line;
+
+	if (!fd || fd < 2 || read(fd, NULL, 0) < 0  || fd > FOPEN_MAX)
+		return (NULL);
+	if (ft_lb_pos(stack) == 0)
+		stack = ft_gnl_read(fd, stack);
+	if (!stack || stack[0] == 0)
+	{
+		free(stack);
+		stack = 0;
+		return (NULL);
+	}
+	line = ft_left(stack, ft_lb_pos(stack));
+	stack = ft_strchr_adapted(stack, '\n');
+	return (line);
+}
+
+int	main(void)
+{
+	int fd;
+	int i;
+	char *str;
+
+	i = 0;
+	fd = open("foobar1.txt", O_RDONLY);
+	while (i < 4)
+	{
+		str = get_next_line(fd);
+		printf("%s", str);
+		free(str);
+		i++;
+	}
+	close (fd); 
+	return (0);
+}
