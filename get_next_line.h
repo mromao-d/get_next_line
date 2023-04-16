@@ -1,24 +1,31 @@
-#ifndef get_next_line
-# define get_next_line
-# define BUFFER_SIZE 100
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   get_next_line.h                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mromao-d <mromao-d@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/02/12 12:30:06 by mromao-d          #+#    #+#             */
+/*   Updated: 2023/04/02 14:57:34 by mromao-d         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
-#include	<stdio.h>
-#include	<string.h>
-#include	<unistd.h>
-#include	<fcntl.h>
-#include	<stdlib.h>
+#ifndef GET_NEXT_LINE_H
 
-struct node 
-{
-   char         *content;
-   struct       node *next;
-}              t_list;
+# define GET_NEXT_LINE_H
 
+# include <stdio.h>
+# include <string.h>
+# include <unistd.h>
+# include <fcntl.h>
+# include <stdlib.h>
 
-int     ft_strlen(char *str);
-char    *ft_strdup(const char *s1);
-char	*ft_strjoin(char const *s1, char const *s2);
-char	*ft_get_next_line(int fd);
+# ifndef BUFFER_SIZE
+#  define BUFFER_SIZE 10
+# endif
 
+int		ft_strlen(char *str);
+char	*ft_strdup(char *s1);
+char	*get_next_line(int fd);
 
 #endif

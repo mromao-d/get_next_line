@@ -1,204 +1,91 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   get_next_line.c                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mromao-d <mromao-d@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/02/12 11:59:50 by mromao-d          #+#    #+#             */
+/*   Updated: 2023/04/02 17:05:01 by mromao-d         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "get_next_line.h"
 
-/* void	*ft_calloc(int nmemb, int size)
+static int	ft_lb_pos(char *str)
 {
-	void	*str;
 	int	i;
+	int	j;
+	int	hasnl;
 
 	i = 0;
-	str = (void *)malloc(nmemb * size);
-	if (!str)
-		return (NULL);
-	while (i < nmemb * size)
+	hasnl = 0;
+	j = 0;
+	while (str && str[i])
 	{
-		((unsigned char *)str)[i] = 0;
+		if (hasnl == 1)
+			str[j++] = str[i];
+		if (str[i] == '\n')
+			hasnl = 1;
+		str[i] = 0;
 		i++;
 	}
-	return (str);
-} */
-
-char	*ft_gnl_read(int fd, char *stack)
-{
-	int		end;
-	char	*heap;
-	char	*tmp;
-
-	end = BUFFER_SIZE;
-	heap = malloc(sizeof(char) * BUFFER_SIZE + 1);
-	if (!heap)
-		return (NULL);
-	while (end > 0)
-	{
-		if (ft_lb_pos(heap) > 0)
-			break;
-		end = read(fd, heap, BUFFER_SIZE);
-		if (end < 0)
-		{
-			if (heap)
-			{
-				free(heap);
-				heap = 0;
-			}
-			if (stack)
-				free(stack);
-			break;
-		}
-		heap[end] = 0;
-		if (stack && heap)
-		{
-			tmp = ft_strdup(stack);
-			free(stack);
-			stack = ft_strjoin(tmp, heap);
-			free(tmp);
-		}
-		else
-			stack = ft_strdup(heap);
-	}
-	if (heap)
-	{
-		free(heap);
-		heap = 0;
-	}
-	return(stack);
+	return (hasnl);
 }
 
-
-char	*ft_left(char *s, int i)
-{
-	char	*temp;
-	int		size;
-
-	size = 0;
-	if (i < ft_strlen(s))
-		temp = malloc(sizeof(char) * (i + 1));
-	else
-		temp = malloc(sizeof(char) * (ft_strlen(s) + 1));
-	if (!temp)
-		return (NULL);
-	if (!s)
-		return(NULL);
-	if (i == 0)
-		return (s = 0);
-	else
-		while (s[size] != 0 && size < i)
-		{	
-			temp[size] = s[size];
-			size++;
-		}
-		temp[size] = '\0';
-	return (temp);
-}
-
-char	*ft_substr(char *str, int start)
+char	*ft_strdjoin(char *s1, char *s2)
 {
 	char	*output;
-	char	*tmp;
 	int		i;
-	int		len;
-	int		j;
+	int		keep_size;
 
-	if (start < 1)
-	{	
-		if (str)
-		{
-			free(str);
-			str = 0;
-		}
-		return (NULL);
-	}
-	i = 0;
-	len = ft_strlen(str);
-	tmp = ft_strdup(str);
-	j = -1;
-	while (tmp[i] && i < start)
-		i++;
-	output = malloc(sizeof(char) * (len - i + 1));
+	output = (char *)malloc(sizeof(char) * (ft_strlen(s1) + ft_strlen(s2) + 1));
 	if (!output)
-		return (NULL);
-	while (tmp[i])
-		output[++j] = tmp[i++];
-	output[++j] = 0;
-	free(str);
-	str = 0;
-	free(tmp);
-	tmp = 0;
-	return(output);
-}
-
-char	*ft_strchr_adapted(char *s, int c)
-{
-	char	*temp;
-	char	*output;
-	int		i;
-
+		return (0);
+	keep_size = ft_strlen(s2);
 	i = 0;
-	temp = (char *)s;
-	if (!s)
-		return (NULL);
-	while (*temp != '\0')
+	while (s1 && s1[i])
 	{	
-		if(*temp == c)
-			break;
-		temp++;
+		output[i] = s1[i];
+		i++;
 	}
-	if (*temp == c) 
-	{
-		output = ft_strdup(++temp);
-		free(s);
-		return (output);
-	}
-	/* if (s)
-	{	
-		free(s);
-		s = 0;
-	} */
-	return (NULL);
+	while (s2 && *s2 && *s2 != '\n' && i < (keep_size + ft_strlen(s1)))
+		output[i++] = *s2++;
+	if (*s2 == '\n')
+		output[i++] = '\n';
+	output[i] = 0;
+	free(s1);
+	return (output);
 }
 
 char	*get_next_line(int fd)
 {
-	static char	*stack;
-	char		*clean_stack;
+	static char	stack[BUFFER_SIZE + 1];
 	char		*line;
+	int			end;
 
-	if (!fd || fd < 2 || read(fd, NULL, 0) < 0  || fd > FOPEN_MAX || BUFFER_SIZE < 1)
-		return (NULL);
-	if (ft_lb_pos(stack) == 0)
-		stack = ft_gnl_read(fd, stack);
-	if (!stack || stack[0] == 0)
+	if (fd > FOPEN_MAX || fd < 0 || BUFFER_SIZE < 1)
+		return (0);
+	line = ft_strdup(stack);
+	if (ft_lb_pos(stack))
+		return (line);
+	end = BUFFER_SIZE;
+	while (end > 0)
 	{
-		free(stack);
-		stack = 0;
-		return (NULL);
+		end = read(fd, stack, BUFFER_SIZE);
+		if (end == -1 || (end == 0 && line[0] == 0))
+		{
+			free(line);
+			return (0);
+		}
+		line = ft_strdjoin(line, stack);
+		if (ft_lb_pos(stack))
+			break ;
 	}
-	if (ft_lb_pos(stack) > 0)
-	{	
-		line = ft_left(stack, ft_lb_pos(stack));
-		/* free(line); */
-	}
-	else
-		line = stack;
-	if (!line || line[0] == 0)
-	{
-		free(line);
-		line = 0;
-		return (NULL);
-	}
-	clean_stack = stack;
-	stack = ft_strchr_adapted(stack, '\n');
-	/* free(clean_stack); */
-	/* if (stack[0] == 0)
-	{	
-		free(stack);
-		stack = 0;
-	} */
-	/* if (line)
-		free(line); */
 	return (line);
 }
 
-
-int	main(void)
+/* int	main(void)
 {
 	int fd;
 	int i;
@@ -206,7 +93,7 @@ int	main(void)
 
 	i = 0;
 	fd = open("foobar2.txt", O_RDONLY);
-	while (i < 1)
+	while (i < 10)
 	{
 		str = get_next_line(fd);
 		printf("%s", str);
@@ -216,27 +103,35 @@ int	main(void)
 	close (fd); 
 	return (0);
 }
+ */
 
-/*  
-int	main(void)
+/* int	main(void)
 {
 	int fd;
 	int i;
 
 	i = 0;
-	fd = open("foobar2.txt", O_RDONLY);
-	while (i < 1)
+	fd = open("1char.txt", O_RDONLY);
+	while (i < 2)
 	{
 		printf("%s", get_next_line(fd));
 		i++;
 	}
 	close (fd); 
 	return (0);
+} */
+
+/* int main(void)
+{
+	char str[100] = "asdoishdoisa as\n asd asd";
+	ft_lb_pos(str);
+	printf("%s , %d", str, ft_strlen((char *)ft_strlen));
+	return (0);
+} */
+
+/* int	main(void)
+{
+	printf("%s", ft_strdjoin("grande ", "pota"));
+	return (0);
 }
  */
-
-/*  int main(void)
- {
-	printf("%s", ft_substr("Granda Pota!", 3));
-	return (0);
- } */
